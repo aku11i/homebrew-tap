@@ -1,44 +1,63 @@
 # homebrew-tap
 
-Homebrew tap for [phantom](https://github.com/aku11i/phantom) - a Git worktree manager with enhanced functionality.
+Homebrew tap for tools developed by aku11i.
 
 ## Installation
 
 ```bash
 brew tap aku11i/tap
+```
+
+## Available Formulas
+
+### phantom
+
+A Git worktree manager with enhanced functionality.
+
+```bash
 brew install phantom
 ```
 
+For more information about phantom, visit the [phantom repository](https://github.com/aku11i/phantom).
+
 ## Usage
 
-Once installed, you can use phantom from the command line:
+Once installed, you can use the tools from the command line:
 
 ```bash
 phantom --help
 ```
 
-For more information about phantom, visit the [main repository](https://github.com/aku11i/phantom).
-
 ## Updating
 
-To update phantom to the latest version:
+To update any installed formula to the latest version:
 
+```bash
+brew upgrade <formula-name>
+```
+
+For example:
 ```bash
 brew upgrade phantom
 ```
 
 ## Uninstallation
 
-To uninstall phantom:
+To uninstall a specific formula:
 
 ```bash
-brew uninstall phantom
+brew uninstall <formula-name>
+```
+
+To remove this tap entirely:
+
+```bash
 brew untap aku11i/tap
 ```
 
-## Formula Details
+## Contributing
 
-The formula installs phantom as a Node.js package using Homebrew's built-in Node.js support. It creates proper symlinks so the `phantom` command is available in your PATH.
+If you find any issues with the formulas or have suggestions for improvements, please open an issue or submit a pull request.
 
 ## License
 
