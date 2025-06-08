@@ -1,0 +1,65 @@
+name: Update Phantom Formula
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight UTC
+  workflow_dispatch:  # Allow manual trigger
+  repository_dispatch:
+    types: [phantom-release]  # Triggered by webhook from phantom main repo
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check for updates
+        id: check
+        run: |
+          # Get current version from formula
+          CURRENT_VERSION=$(grep -oP '(?<=phantom-)\d+\.\d+\.\d+(?=\.tgz)' Formula/phantom.rb)
+          echo "Current version: $CURRENT_VERSION"
+          
+          # Get latest version from npm
+          LATEST_VERSION=$(npm view @aku11i/phantom version)
+          echo "Latest version: $LATEST_VERSION"
+          
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "latest_version=$LATEST_VERSION" >> $GITHUB_OUTPUT
+          
+          if [ "$CURRENT_VERSION" != "$LATEST_VERSION" ]; then
+            echo "update_needed=true" >> $GITHUB_OUTPUT
+          else
+            echo "update_needed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update formula
+        if: steps.check.outputs.update_needed == 'true'
+        run: |
+          LATEST_VERSION=${{ steps.check.outputs.latest_version }}
+          
+          # Calculate SHA256
+          URL="https://registry.npmjs.org/@aku11i/phantom/-/phantom-${LATEST_VERSION}.tgz"
+          SHA256=$(curl -sL "$URL" | sha256sum | cut -d' ' -f1)
+          
+          # Update formula
+          sed -i "s|phantom-[0-9.]*\.tgz|phantom-${LATEST_VERSION}.tgz|g" Formula/phantom.rb
+          sed -i "s|sha256 \"[a-f0-9]*\"|sha256 \"$SHA256\"|g" Formula/phantom.rb
+          
+          echo "Updated to version $LATEST_VERSION with SHA256 $SHA256"
+
+      - name: Commit and push
+        if: steps.check.outputs.update_needed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          git add Formula/phantom.rb
+          git commit -m "Update phantom to ${{ steps.check.outputs.latest_version }}"
+          git push
