@@ -12,10 +12,10 @@ The `update-formula.yml` workflow runs daily at midnight (UTC) to check for the 
 
 #### Option A: Via GitHub Actions (Recommended)
 
-1. Go to the [Actions](https://github.com/aku11i/homebrew-phantom/actions) tab on GitHub
-2. Select either "Update Phantom Formula" or "Release Notification"
+1. Go to the [Actions](https://github.com/aku11i/homebrew-tap/actions) tab on GitHub
+2. Select "Update Phantom Formula"
 3. Click "Run workflow"
-4. Enter the version number if required and run
+4. Run the workflow
 
 #### Option B: Local Update
 
@@ -46,13 +46,13 @@ git push
 To automatically update this tap when releasing phantom, add the following to the phantom release workflow:
 
 ```yaml
-- name: Notify Homebrew tap
-  uses: peter-evans/repository-dispatch@v3
-  with:
-    token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
-    repository: aku11i/homebrew-phantom
-    event-type: phantom-release
-    client-payload: '{"version": "${{ steps.version.outputs.version }}"}'
+- name: Trigger Homebrew tap update
+  run: |
+    gh workflow run update-formula.yml \
+      --repo aku11i/homebrew-tap \
+      --ref main
+  env:
+    GH_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
 ```
 
 ## Troubleshooting
@@ -81,10 +81,10 @@ The automated workflows handle:
 1. **Version Detection**: Comparing current formula version with npm registry
 2. **SHA256 Calculation**: Downloading the tarball and computing checksum
 3. **Formula Update**: Using sed to update version and SHA256 in the formula
-4. **Git Operations**: Committing and pushing changes or creating pull requests
+4. **Git Operations**: Committing and pushing changes directly to the repository
 
 ## Security Considerations
 
 - The workflows use minimal permissions
 - SHA256 checksums ensure package integrity
-- Pull request workflow allows review before merging
+- Direct commits require careful monitoring of automated changes
