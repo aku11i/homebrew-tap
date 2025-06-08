@@ -1,11 +1,11 @@
-# homebrew-phantom
+# homebrew-tap
 
 Homebrew tap for [phantom](https://github.com/aku11i/phantom) - a Git worktree manager with enhanced functionality.
 
 ## Installation
 
 ```bash
-brew tap aku11i/phantom
+brew tap aku11i/tap
 brew install phantom
 ```
 
@@ -33,7 +33,7 @@ To uninstall phantom:
 
 ```bash
 brew uninstall phantom
-brew untap aku11i/phantom
+brew untap aku11i/tap
 ```
 
 ## Formula Details
