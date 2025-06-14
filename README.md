@@ -55,6 +55,29 @@ To remove this tap entirely:
 brew untap aku11i/tap
 ```
 
+## Maintainer Guide
+
+### Updating Formula Versions
+
+When a new version of a tool is released, follow these steps to update the formula:
+
+1. **Get the new version's download URL and SHA256**:
+   ```bash
+   curl -sL https://registry.npmjs.org/@aku11i/phantom/-/phantom-<VERSION>.tgz | shasum -a 256
+   ```
+
+2. **Update the formula file**:
+   - Edit `Formula/<tool-name>.rb`
+   - Update the `url` to point to the new version
+   - Update the `sha256` with the new checksum
+
+3. **Commit and push the changes**:
+   ```bash
+   git add Formula/<tool-name>.rb
+   git commit -m "Update <tool-name> to v<VERSION>"
+   git push origin main
+   ```
+
 ## Contributing
 
 If you find any issues with the formulas or have suggestions for improvements, please open an issue or submit a pull request.
