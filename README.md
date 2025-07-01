@@ -61,32 +61,74 @@ brew untap aku11i/tap
 
 When a new version of a tool is released, follow these steps to update the formula:
 
-1. **Create a new branch for the update**:
+#### Method 1: Manual Update
+
+1. **Get the new version's download URL and SHA256**:
    ```bash
-   git checkout -b update-<tool-name>-<version>
+   curl -s https://registry.npmjs.org/@aku11i/phantom/-/phantom-<VERSION>.tgz | shasum -a 256
    ```
 
-2. **Get the new version's download URL and SHA256**:
-   ```bash
-   curl -sL https://registry.npmjs.org/@aku11i/phantom/-/phantom-<VERSION>.tgz | sha256sum
-   ```
-
-3. **Update the formula file**:
+2. **Update the formula file**:
    - Edit `Formula/<tool-name>.rb`
    - Update the `url` to point to the new version
    - Update the `sha256` with the new checksum
 
-4. **Commit the changes**:
+3. **Test the formula locally**:
    ```bash
+   brew install --build-from-source ./Formula/<tool-name>.rb
+   <tool-name> version  # Verify the new version
+   ```
+
+4. **Create a new branch and commit changes**:
+   ```bash
+   git checkout -b update-<tool-name>-v<VERSION>
    git add Formula/<tool-name>.rb
-   git commit -m "Update <tool-name> to v<VERSION>"
+   git commit -m "Update <tool-name> to v<VERSION>
+
+   🤖 Generated with [Claude Code](https://claude.ai/code)
+
+   Co-Authored-By: Claude <noreply@anthropic.com>"
    ```
 
 5. **Push the branch and create a pull request**:
    ```bash
-   git push -u origin update-<tool-name>-<version>
-   gh pr create --title "Update <tool-name> to v<VERSION>" --body "Updates <tool-name> formula to version <VERSION>"
+   git push -u origin update-<tool-name>-v<VERSION>
+   gh pr create --title "Update <tool-name> to v<VERSION>" --body "$(cat <<'EOF'
+   ## Summary
+   - Update <tool-name> formula from vOLD_VERSION to v<VERSION>
+   - Update SHA256 hash for the new version
+
+   ## Test plan
+   - [x] Verified the new SHA256 hash matches the published package
+   - [x] Tested local installation with \`brew install --build-from-source\`
+   - [x] Confirmed <tool-name> v<VERSION> is working correctly
+
+   🤖 Generated with [Claude Code](https://claude.ai/code)
+   EOF
+   )"
    ```
+
+#### Method 2: Using Claude Code (Recommended)
+
+If you have Claude Code available, you can automate most of this process:
+
+1. **Simply mention the new release**:
+   ```
+   new version of <tool-name> is released!
+   ```
+
+2. **Request PR creation**:
+   ```
+   thanks, create a pr please
+   ```
+
+Claude Code will automatically:
+- Check the current formula version
+- Fetch the latest version from npm
+- Calculate the new SHA256 hash
+- Update the formula file
+- Test the installation locally
+- Create a branch, commit changes, and open a PR
 
 ## Contributing
 
