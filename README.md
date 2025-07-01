@@ -63,10 +63,6 @@ When a new version of a tool is released, follow these steps to update the formu
 
 1. **Check for the latest version**:
    ```bash
-   # Check GitHub releases
-   curl -s https://api.github.com/repos/aku11i/phantom/releases/latest | grep tag_name
-   
-   # Or check npm registry
    curl -s https://registry.npmjs.org/@aku11i/phantom/latest | grep version
    ```
 
