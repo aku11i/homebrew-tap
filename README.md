@@ -61,31 +61,38 @@ brew untap aku11i/tap
 
 When a new version of a tool is released, follow these steps to update the formula:
 
-1. **Create a new branch for the update**:
+1. **Check for the latest version**:
+   ```bash
+   curl -s https://registry.npmjs.org/@aku11i/phantom/latest | grep version
+   ```
+
+2. **Create a new branch for the update**:
    ```bash
    git checkout -b update-<tool-name>-<version>
    ```
 
-2. **Get the new version's download URL and SHA256**:
+3. **Get the new version's download URL and SHA256**:
    ```bash
    curl -sL https://registry.npmjs.org/@aku11i/phantom/-/phantom-<VERSION>.tgz | sha256sum
    ```
 
-3. **Update the formula file**:
+4. **Update the formula file**:
    - Edit `Formula/<tool-name>.rb`
    - Update the `url` to point to the new version
    - Update the `sha256` with the new checksum
 
-4. **Commit the changes**:
+5. **Commit and push the changes**:
    ```bash
    git add Formula/<tool-name>.rb
    git commit -m "Update <tool-name> to v<VERSION>"
    ```
 
-5. **Push the branch and create a pull request**:
-   ```bash
    git push -u origin update-<tool-name>-<version>
-   gh pr create --title "Update <tool-name> to v<VERSION>" --body "Updates <tool-name> formula to version <VERSION>"
+   ```
+
+6. **Create a pull request**:
+   ```bash
+   gh pr create --title "Update <tool-name> to v<VERSION>" --body "Updates <tool-name> from v<OLD_VERSION> to v<VERSION> with updated SHA256 checksum."
    ```
 
 ## Contributing
