@@ -1,8 +1,8 @@
 class Phantom < Formula
   desc "Git worktree manager with enhanced functionality"
   homepage "https://github.com/aku11i/phantom"
-  url "https://registry.npmjs.org/@aku11i/phantom/-/phantom-3.1.0.tgz"
-  sha256 "e03ba7289ee839b34c2f8b490eb8294d3ddb5a90a0adaa9a9b6b28e30ae07f76"
+  url "https://registry.npmjs.org/@aku11i/phantom/-/phantom-3.2.0.tgz"
+  sha256 "d4656179367893a97d41559e185926e8fcb43fc968eb80b2149d0f94148207bc"
   license "MIT"
 
   depends_on "node"
